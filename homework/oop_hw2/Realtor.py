@@ -35,4 +35,3 @@ class Realtor(metaclass=SingletonMetaClass):
         if random.randint(1, 100) <= 10:
             self.client.budget = 0
             print(f'{self.name} stole all money from client {self.client.name}')
-
