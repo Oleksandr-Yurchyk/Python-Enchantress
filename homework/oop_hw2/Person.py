@@ -1,6 +1,11 @@
 from abc import ABC, abstractmethod
-from House import House
 from homework.oop_hw2.Realtor import Realtor
+
+
+class House:
+    def __init__(self, area: int, cost: int):
+        self.area = area
+        self.cost = cost
 
 
 class Human(ABC):
@@ -33,7 +38,7 @@ class Person(Human):
             self.budget -= house.cost
             self.have_home = True
             print(f'Congrats! {self.name} have bought a house for {house.cost}$. His budget after purchase is - '
-                  f'{self.budget}\n')
+                  f'{self.budget}$\n')
         else:
             print(f'{self.name} haven`t enough money to buy this house')
 
@@ -49,20 +54,25 @@ class Person(Human):
         self.age += 1
         print(f'{self.name} have worked 1 year with salary {self.salary}$ and earn {self.salary * 12}$')
 
+    def apply_discount(self, house: House, percent_of_discount):
+        amount_of_discount = int(house.cost * (percent_of_discount / 100))
+        print(f'{self.name} got {percent_of_discount}% or {amount_of_discount}$ discount\n')
+        house.cost -= amount_of_discount
+
 
 if __name__ == '__main__':
     alex = Person('Alex', 20, availability_of_money=False, have_home=False)
     penthouse = House(area=40, cost=80000)
     realtor = Realtor('John', [penthouse], alex, discount=True)
 
-    # Houses info before discounts
+    # Houses info before discount
     realtor.info_about_houses()
 
-    # House discounts
-    realtor.client_discount()
-    penthouse.purchase_discount_10percent()
+    # Applying discount
+    realtor_disc = realtor.client_discount()
+    alex.apply_discount(penthouse, realtor_disc)
 
-    # Houses info after discounts
+    # Houses info after discount
     realtor.info_about_houses()
 
     alex.info_about_myself()

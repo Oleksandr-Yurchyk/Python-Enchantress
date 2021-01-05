@@ -27,13 +27,8 @@ class Realtor(metaclass=SingletonMetaClass):
     def client_discount(self):
         if self.discount:
             percent_of_discount = 5  # Percentage can be 0..100
-            for house in self.houses:
-                amount_of_discount = int(house.cost * (percent_of_discount / 100))
-                print(f'{self.name} give {percent_of_discount}% or {amount_of_discount}$ discount to '
-                      f'{self.client.name}')
-                house.cost -= amount_of_discount
-        else:
-            print(f'Sorry {self.name} can`t give you a discount')
+            return percent_of_discount
+        print(f'Sorry {self.name} can`t give you a discount')
 
     # Steal all your money with 10% chance
     def steal_client_money(self):
