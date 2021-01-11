@@ -20,8 +20,9 @@ class Realtor(metaclass=SingletonMetaClass):
 
     # Provide information about all the Houses
     def info_about_houses(self):
-        for i in range(len(self.houses)):
-            print(f'House #{i}: area - {self.houses[i].area} m2, cost - {self.houses[i].cost}$\n')
+        for house in self.houses:
+            print(f'{house.title}: area - {house.area} m2, cost - {house.cost}$')
+        print()
 
     # Give a discount 5% by realtor
     def client_discount(self):
@@ -32,6 +33,9 @@ class Realtor(metaclass=SingletonMetaClass):
 
     # Steal all your money with 10% chance
     def steal_client_money(self):
+        print(f'Realtor trying to steal money in {self.client.name}')
         if random.randint(1, 100) <= 10:
             self.client.budget = 0
             print(f'{self.name} stole all money from client {self.client.name}')
+        else:
+            print(f'Realtor {self.name} could not steal money from client {self.client.name}')

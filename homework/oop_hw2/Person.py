@@ -1,11 +1,20 @@
+import random
 from abc import ABC, abstractmethod
-from homework.oop_hw2.Realtor import Realtor
+from Realtor import Realtor
+
+PRICE_PER_SQUARE_METER = 500
 
 
 class House:
-    def __init__(self, area: int, cost: int):
-        self.area = area
-        self.cost = cost
+    def __init__(self):
+        self.area = random.randrange(20, 80, 10)
+        self.cost = self.area * PRICE_PER_SQUARE_METER
+        if self.area < 30:
+            self.title = 'Cottage'
+        elif 30 <= self.area < 60:
+            self.title = 'Villa'
+        else:
+            self.title = 'Penthouse'
 
 
 class Human(ABC):
@@ -33,14 +42,16 @@ class Person(Human):
         self.salary = 1000
         self.have_home = have_home
 
-    def buy_house(self, house: House):
-        if self.budget > house.cost:
-            self.budget -= house.cost
-            self.have_home = True
-            print(f'Congrats! {self.name} have bought a house for {house.cost}$. His budget after purchase is - '
-                  f'{self.budget}$\n')
-        else:
-            print(f'{self.name} haven`t enough money to buy this house')
+    def buy_house(self, houses: list):
+        for house in houses:
+            if self.budget > house.cost:
+                self.budget -= house.cost
+                self.have_home = True
+                houses.remove(house)
+                print(f'Congrats! {self.name} have bought a house for {house.cost}$. His budget after purchase is - '
+                      f'{self.budget}$\n')
+            else:
+                print(f'{self.name} haven`t enough money to buy {house.title}')
 
     def make_money(self):
         self.budget += self.salary
@@ -54,23 +65,25 @@ class Person(Human):
         self.age += 1
         print(f'{self.name} have worked 1 year with salary {self.salary}$ and earn {self.salary * 12}$')
 
-    def apply_discount(self, house: House, percent_of_discount):
-        amount_of_discount = int(house.cost * (percent_of_discount / 100))
-        print(f'{self.name} got {percent_of_discount}% or {amount_of_discount}$ discount\n')
-        house.cost -= amount_of_discount
+    def apply_discount(self, houses: list, percent_of_discount):
+        for house in houses:
+            amount_of_discount = int(house.cost * (percent_of_discount / 100))
+            print(f'{self.name} got {percent_of_discount}% or {amount_of_discount}$ discount to the {house.title}')
+            house.cost -= amount_of_discount
+        print()
 
 
 if __name__ == '__main__':
     alex = Person('Alex', 20, availability_of_money=False, have_home=False)
-    penthouse = House(area=40, cost=80000)
-    realtor = Realtor('John', [penthouse], alex, discount=True)
+    available_houses = [House() for _ in range(5)]
+    realtor = Realtor('John', available_houses, client=alex, discount=True)
 
     # Houses info before discount
     realtor.info_about_houses()
 
     # Applying discount
     realtor_disc = realtor.client_discount()
-    alex.apply_discount(penthouse, realtor_disc)
+    alex.apply_discount(available_houses, realtor_disc)
 
     # Houses info after discount
     realtor.info_about_houses()
@@ -79,11 +92,11 @@ if __name__ == '__main__':
 
     while not alex.have_home:
         alex.work_1_year()
-        alex.buy_house(penthouse)
+        alex.buy_house(available_houses)
 
     alex.info_about_myself()
 
-    print(f'Realtor trying to steal money in {alex.name}')
+    # Realtor try to steal money
     realtor.steal_client_money()
 
     alex.info_about_myself()
