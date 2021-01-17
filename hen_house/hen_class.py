@@ -20,13 +20,13 @@ class HenHouse:
     @property
     def season(self) -> str:
         today = datetime.datetime.today()
-        if today.month in [12, 1, 2]:
+        if today.month in (12, 1, 2):
             return "winter"
-        elif today.month in [0, 3, 4, 5]:
+        elif today.month in (3, 4, 5):
             return "spring"
-        elif today.month in [6, 7, 8]:
+        elif today.month in (6, 7, 8):
             return "summer"
-        elif today.month in [9, 10, 11]:
+        elif today.month in (9, 10, 11):
             return "autumn"
 
     def _productivity_index(self):

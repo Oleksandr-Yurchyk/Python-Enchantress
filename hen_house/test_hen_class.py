@@ -9,10 +9,10 @@ class TestHenHouse(unittest.TestCase):
     def setUp(self) -> None:
         self.house = HenHouse(20)
 
-    def test_correct_hen_count(self):
+    def test_wrong_hen_count(self):
         self.assertRaises(ValueError, lambda: self.house.__init__(4))
 
-    def test_wrong_hen_count(self):
+    def test_correct_hen_count(self):
         self.assertEqual(self.house.__init__(6), None)
 
     def test_season_winter(self):
