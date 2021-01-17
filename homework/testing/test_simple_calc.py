@@ -32,7 +32,7 @@ class SimpleCalcTestCase(unittest.TestCase):
     def test_divide_negative_numbers(self):
         self.assertEqual(calc.divide(-10, -5), 2)
 
-    def test_divide_by_zero(self):
+    def test_divide_failed(self):
         self.assertRaises(ValueError, lambda: calc.divide(3, 0))
 
 
