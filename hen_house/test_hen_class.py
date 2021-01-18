@@ -47,7 +47,7 @@ class TestHenHouse(unittest.TestCase):
 
     @patch('hen_house.hen_class.HenHouse.season', 'winter')
     def test_get_max_count_for_soup_returns_zero(self):
-        self.assertEqual(self.house.get_max_count_for_soup(5), 0)
+        self.assertEqual(self.house.get_max_count_for_soup(6), 0)
 
     def test_food_price(self):
         with patch('hen_house.hen_class.requests.get') as response:
