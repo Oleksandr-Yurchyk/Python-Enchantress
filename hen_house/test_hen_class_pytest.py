@@ -131,3 +131,4 @@ class TestHenClassNegative:
         mock = mocker.patch('hen_house.hen_class.requests.get')
         mock.return_value.status_code = 404
         pytest.raises(ConnectionError, lambda: house.food_price())
+
