@@ -34,6 +34,15 @@ class TestHenClassPositive:
         assert house.season == season
 
     @pytest.mark.parametrize(
+        "month",
+        (1, 3, 6, 9)
+    )
+    def test_season_is_instance_of_str(self, mocker, house, month):
+        mock = mocker.patch('hen_house.hen_class.datetime.datetime')
+        mock.today().month = month
+        assert isinstance(house.season, str)
+
+    @pytest.mark.parametrize(
         'season',
         (
                 'winter',
@@ -48,32 +57,32 @@ class TestHenClassPositive:
         assert house._productivity_index() == house.hens_productivity.get(season)
 
     @pytest.mark.parametrize(
-        'season, hen_count, expected_res',
+        'season, expected_res',
         (
-                ('winter', 5, 1),
-                ('autumn', 5, 2),
-                ('spring', 5, 3),
-                ('summer', 5, 5)
+                ('winter', 1),
+                ('autumn', 2),
+                ('spring', 3),
+                ('summer', 5)
         )
     )
-    def test_get_eggs_daily_positive(self, mocker, house, season, hen_count, expected_res):
+    def test_get_eggs_daily_positive(self, mocker, house, season, expected_res):
         mock = mocker.patch('hen_house.hen_class.HenHouse.season', new_callable=mocker.PropertyMock)
         mock.return_value = season
-        assert house.get_eggs_daily(hen_count) == expected_res
+        assert house.get_eggs_daily(5) == expected_res
 
     @pytest.mark.parametrize(
-        'season, expected_eggs, expected_res',
+        'season, expected_res',
         (
-                ('winter', 3, 8),
-                ('spring', 3, 16),
-                ('summer', 3, 17),
-                ('autumn', 3, 14),
+                ('winter', 8),
+                ('spring', 16),
+                ('summer', 17),
+                ('autumn', 14),
         )
     )
-    def test_get_max_count_for_soup_positive(self, mocker, house, season, expected_eggs, expected_res):
+    def test_get_max_count_for_soup_positive(self, mocker, house, season, expected_res):
         mock = mocker.patch('hen_house.hen_class.HenHouse.season', new_callable=mocker.PropertyMock)
         mock.return_value = season
-        assert house.get_max_count_for_soup(expected_eggs) == expected_res
+        assert house.get_max_count_for_soup(3) == expected_res
 
     def test_food_price_positive(self, mocker, house):
         mock = mocker.patch('hen_house.hen_class.requests.get')
