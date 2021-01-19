@@ -98,7 +98,7 @@ class TestHenClassNegative:
                 -1, 0, 4
         )
     )
-    def test_hen_count_failure(self, house, hen_count):
+    def test_hen_count_failed(self, house, hen_count):
         pytest.raises(ValueError, lambda: house.__init__(hen_count))
 
     @pytest.mark.parametrize(
@@ -122,12 +122,12 @@ class TestHenClassNegative:
                 'month',
         )
     )
-    def test_productivity_index_failure(self, mocker, house, season):
+    def test_productivity_index_failed(self, mocker, house, season):
         mock = mocker.patch('hen_house.hen_class.HenHouse.season', new_callable=mocker.PropertyMock)
         mock.return_value = season
         pytest.raises(ErrorTimesOfYear, lambda: house._productivity_index())
 
-    def test_food_price_failure(self, mocker, house):
+    def test_food_price_failed(self, mocker, house):
         mock = mocker.patch('hen_house.hen_class.requests.get')
         mock.return_value.status_code = 404
         pytest.raises(ConnectionError, lambda: house.food_price())
