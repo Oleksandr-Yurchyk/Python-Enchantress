@@ -9,6 +9,6 @@
 8. cd .. && cat ubuntu.zip | docker load
 9. docker inspect ubuntu
 
-### Steps, I did to solve task #1:
-1. docker build -t rome_dat .
+### Steps, I did to solve task #2:
+1. docker build -t rome_date .
 2. docker run rome_date
