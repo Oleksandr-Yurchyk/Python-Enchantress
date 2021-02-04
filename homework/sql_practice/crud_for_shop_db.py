@@ -39,11 +39,11 @@ class DatabaseConnection:
         self.cursor.execute(read_user_info_query, (_id,))
         return self.cursor.fetchone()
 
-    def update_user(self, new_info: dict, _id: int):
-        update_user_query = f"""
+    def update_user(self, new_info: dict):
+        update_user_query = """
         UPDATE users
         SET name=%(name)s, email=%(email)s, registration_time=%(registration_time)s
-        WHERE id = {_id};
+        WHERE id = %(id)s;
         """
         self.cursor.execute(update_user_query, new_info)
 
@@ -54,7 +54,7 @@ class DatabaseConnection:
         """
         self.cursor.execute(delete_user_query, (_id,))
 
-    def create_cart(self, cart: dict, cart_details: list):
+    def create_cart(self, cart: dict):
         create_cart_query = """
         INSERT INTO cart (creation_time, user_id)
         VALUES (%(creation_time)s, %(user_id)s);
@@ -67,7 +67,7 @@ class DatabaseConnection:
         INSERT INTO cart_details (cart_id, price, product)
         VALUES ({cart_id}, %(price)s, %(product)s);
         """
-        self.cursor.executemany(create_cart_details_query, cart_details)
+        self.cursor.executemany(create_cart_details_query, cart.get('cart_details'))
 
     def get_last_created_cart_id(self):
         last_created_cart_query = """
@@ -90,11 +90,11 @@ class DatabaseConnection:
         print(cart)
         return cart
 
-    def update_cart(self, cart: dict, _id: int):
-        update_cart_query = f"""
+    def update_cart(self, cart: dict):
+        update_cart_query = """
         UPDATE cart
         SET creation_time=%(creation_time)s, user_id=%(user_id)s
-        WHERE id={_id}
+        WHERE id=%(id)s
         """
         self.cursor.execute(update_cart_query, cart)
 
