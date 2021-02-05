@@ -1,5 +1,4 @@
 import datetime
-
 import pytest
 import psycopg2
 from homework.sql_practice.crud_for_shop_db import DatabaseConnection
@@ -18,6 +17,7 @@ class TestCasePositive:
     def test_crud_users(self, db_conn):
         new_user_info = {'name': 'Oleksandr', 'email': 'sasha@gmail.com', 'registration_time': '2021-02-03 12:40:00'}
 
+        # create user and get his id
         db_conn.create_user(new_user_info)
         user_id = db_conn.get_last_created_user_id()
 
@@ -25,40 +25,45 @@ class TestCasePositive:
         update_info_for_user = {'id': user_id, 'name': 'Oleksandr', 'email': 'oleksandr@gmail.com',
                                 'registration_time': '2021-02-03 12:40:00'}
 
+        # verify that user created correctly
         assert db_conn.read_user_info(user_id) == (
             'Oleksandr', 'sasha@gmail.com', datetime.datetime(2021, 2, 3, 12, 40))
 
+        # update user info and verify that info updated correctly
         db_conn.update_user(update_info_for_user)
         assert db_conn.read_user_info(user_id) == (
             'Oleksandr', 'oleksandr@gmail.com', datetime.datetime(2021, 2, 3, 12, 40))
 
+        # delete user and verify that user is gone
         db_conn.delete_user(user_id)
         assert db_conn.read_user_info(user_id) is None
 
     def test_crud_cart(self, db_conn):
         # creating user for using his id in cart creation
-        new_user_info = {'name': 'Oleksandr', 'email': 'sasha@gmail.com', 'registration_time': '2021-02-03 12:40:00'}
+        new_user_info = {'name': 'Oleksandr3', 'email': 'sasha@gmail.com', 'registration_time': '2021-02-03 12:40:00'}
         db_conn.create_user(new_user_info)
         user_id = db_conn.get_last_created_user_id()
 
-        new_cart = {'creation_time': '2000-02-04 11:20:00', 'user_id': user_id,
-                    'cart_details': [{'price': 1000, 'product': 'Iphone'},
-                                     {'price': 2000, 'product': 'Macbook'}]
+        # cart with incorrect price for product
+        new_cart = {'creation_time': '2021-02-04 11:20:00', 'user_id': user_id,
+                    'cart_details': [{'price': 10, 'product': 'Iphone'}]
                     }
 
         # creating cart
         db_conn.create_cart(new_cart)
         cart_id = db_conn.get_last_created_cart_id()
 
-        # updated value creation_time
-        update_info_for_cart = {'id': cart_id, 'creation_time': '2021-02-04 11:20:00', 'user_id': user_id}
+        # verify that cart created correctly
+        assert db_conn.read_cart(cart_id) == [(datetime.datetime(2021, 2, 4, 11, 20), 'Iphone', 10)]
 
-        assert db_conn.read_cart(cart_id) == [(datetime.datetime(2000, 2, 4, 11, 20), 'Iphone', 1000),
-                                              (datetime.datetime(2000, 2, 4, 11, 20), 'Macbook', 2000)]
+        # updated value price for product
+        update_info_for_cart = {'id': cart_id, 'creation_time': '2021-02-04 11:20:00', 'user_id': user_id,
+                                'cart_details': [{'cart_id': cart_id, 'price': 1000, 'product': 'Iphone'}]
+                                }
 
+        # update cart and verify that cart updated correctly
         db_conn.update_cart(update_info_for_cart)
-        assert db_conn.read_cart(cart_id) == [(datetime.datetime(2021, 2, 4, 11, 20), 'Iphone', 1000),
-                                              (datetime.datetime(2021, 2, 4, 11, 20), 'Macbook', 2000)]
+        assert db_conn.read_cart(cart_id) == [(datetime.datetime(2021, 2, 4, 11, 20), 'Iphone', 1000)]
 
         # delete created data
         db_conn.delete_cart(cart_id)
@@ -96,10 +101,11 @@ class TestCaseNegative:
         not_exist_user_id = 999
 
         new_cart = {'creation_time': '2000-02-04 11:20:00', 'user_id': not_exist_user_id,
-                    'cart_details': [{'price': 1000, 'product': 'Iphone'},
-                                     {'price': 2000, 'product': 'Macbook'}]
+                    'cart_details': [{'price': 1000, 'product': 'Iphone'}]
                     }
-        update_info_for_cart = {'id': 1, 'creation_time': '2021-02-04 11:20:00', 'user_id': not_exist_user_id}
+        update_info_for_cart = {'id': 1, 'creation_time': '2021-02-04 11:20:00', 'user_id': not_exist_user_id,
+                                'cart_details': [{'cart_id': 1, 'price': 1000, 'product': 'Iphone'}]
+                                }
 
         # creating cart on not existing user_id
         pytest.raises(psycopg2.Error, lambda: db_conn.create_cart(new_cart))

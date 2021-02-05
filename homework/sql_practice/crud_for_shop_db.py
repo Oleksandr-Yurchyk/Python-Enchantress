@@ -37,7 +37,9 @@ class DatabaseConnection:
         WHERE id = %s;
         """
         self.cursor.execute(read_user_info_query, (_id,))
-        return self.cursor.fetchone()
+        user = self.cursor.fetchone()
+        print(user)
+        return user
 
     def update_user(self, new_info: dict):
         update_user_query = """
@@ -97,6 +99,13 @@ class DatabaseConnection:
         WHERE id=%(id)s
         """
         self.cursor.execute(update_cart_query, cart)
+
+        update_cart_details_query = """
+        UPDATE cart_details
+        SET price=%(price)s, product=%(product)s
+        WHERE cart_id=%(cart_id)s
+        """
+        self.cursor.executemany(update_cart_details_query, cart.get('cart_details'))
 
     def delete_cart(self, _id: int):
         delete_cart_details_query = """
