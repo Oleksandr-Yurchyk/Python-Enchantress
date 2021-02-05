@@ -28,8 +28,7 @@ class DatabaseConnection:
         ORDER BY id DESC LIMIT 1;
         """
         self.cursor.execute(last_created_user_query)
-        id, name = self.cursor.fetchone()
-        return id
+        return self.cursor.fetchone()[0]
 
     def read_user_info(self, _id: int):
         read_user_info_query = """
@@ -77,8 +76,7 @@ class DatabaseConnection:
         ORDER BY id DESC LIMIT 1;
         """
         self.cursor.execute(last_created_cart_query)
-        id, creation_time = self.cursor.fetchone()
-        return id
+        return self.cursor.fetchone()[0]
 
     def read_cart(self, _id: int):
         read_cart_and_its_details_query = """
