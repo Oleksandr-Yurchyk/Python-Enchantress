@@ -85,7 +85,6 @@ def create_cart():
     global cart_counter
 
     cart = request.json
-
     response = {
         'cart_id': cart_counter,
         'creation_time': datetime.now().isoformat()

@@ -121,7 +121,7 @@ def test_update_cart(store_app):
             {
                 "product": 'fireworks',
                 "price": 1500,
-            }
+            },
         ]
     }
     response = store_app.put('/carts/1', json=data_to_update_cart)
@@ -132,5 +132,6 @@ def test_update_cart(store_app):
 
 def test_delete_cart(store_app):
     response = store_app.delete('/carts/1')
+
     assert response.status_code == 200
     assert response.json == {"status": "success"}
