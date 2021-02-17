@@ -9,8 +9,9 @@ our_store
 - config.py
 tests
 - conftest.py
-
-
+- unit
+- integration
+- end_to_end
 
 
 # Run postgress from docker
