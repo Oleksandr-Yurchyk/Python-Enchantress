@@ -10,8 +10,8 @@ cart_counter = 1
 
 
 class User(Resource):
-    @staticmethod
-    def post():
+    @classmethod
+    def post(cls):
         global user_counter
 
         user = request.json
@@ -27,15 +27,15 @@ class User(Resource):
 
         return response, 201
 
-    @staticmethod
-    def get(user_id):
+    @classmethod
+    def get(cls, user_id):
         user = USERS_DATABASE.get(user_id)
         if not user:
             return {"error": f"no such user with id {user_id}"}, 404
         return user
 
-    @staticmethod
-    def put(user_id):
+    @classmethod
+    def put(cls, user_id):
         response = {"status": "success"}
         data_to_update = request.json
         user = USERS_DATABASE.get(user_id)
@@ -48,8 +48,8 @@ class User(Resource):
         else:
             return {"error": f"no such user with id {user_id}"}, 404
 
-    @staticmethod
-    def delete(user_id):
+    @classmethod
+    def delete(cls, user_id):
         global user_counter
 
         response = {"status": "success"}
@@ -63,8 +63,8 @@ class User(Resource):
 
 
 class Cart(Resource):
-    @staticmethod
-    def post():
+    @classmethod
+    def post(cls):
         global cart_counter
 
         cart = request.json
@@ -80,15 +80,15 @@ class Cart(Resource):
 
         return response, 201
 
-    @staticmethod
-    def get(cart_id):
+    @classmethod
+    def get(cls, cart_id):
         cart = CART_DATABASE.get(cart_id)
         if not cart:
             return {"error": f"no such cart with id {cart_id}"}, 404
         return cart
 
-    @staticmethod
-    def put(cart_id):
+    @classmethod
+    def put(cls, cart_id):
         response = {'status': 'success'}
         data_to_update = request.json
         cart = CART_DATABASE.get(cart_id)
@@ -101,8 +101,8 @@ class Cart(Resource):
         else:
             return {"error": f"no such cart with id {cart_id}"}, 404
 
-    @staticmethod
-    def delete(cart_id):
+    @classmethod
+    def delete(cls, cart_id):
         global cart_counter
 
         response = {"status": "success"}
